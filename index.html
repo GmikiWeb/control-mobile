@@ -40,7 +40,6 @@
             position: fixed;
         }
 
-        /* Основной контейнер */
         .app {
             width: 100vw;
             height: 100vh;
@@ -52,7 +51,6 @@
             position: relative;
         }
 
-        /* Верхняя панель */
         .header {
             height: 70px;
             background: var(--surface);
@@ -88,7 +86,6 @@
             border: 1px solid var(--border);
         }
 
-        /* Основной контент */
         .main-content {
             flex: 1;
             overflow: hidden;
@@ -96,7 +93,6 @@
             background: var(--bg);
         }
 
-        /* Панель аккаунтов */
         .accounts-panel {
             height: 140px;
             background: var(--surface);
@@ -116,7 +112,6 @@
             display: none;
         }
 
-        /* Карточка аккаунта */
         .account-card {
             display: inline-flex;
             flex-direction: column;
@@ -161,7 +156,6 @@
             transform: scale(0.98);
         }
 
-        /* Верхняя часть карточки */
         .account-header {
             display: flex;
             align-items: center;
@@ -208,7 +202,6 @@
             white-space: nowrap;
         }
 
-        /* Контейнер для контента пользователя */
         .user-content-container {
             flex: 1;
             overflow: hidden;
@@ -242,7 +235,6 @@
             visibility: visible;
         }
 
-        /* Карточка задач */
         .tasks-card {
             background: var(--card);
             border-radius: var(--radius);
@@ -277,7 +269,56 @@
             flex: 1;
         }
 
-        /* Состояние "нет задач" */
+        .tasks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            background: var(--surface-light);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .task-number {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .task-text {
+            flex: 1;
+            color: var(--text);
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .task-collaboration {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -286,6 +327,11 @@
             border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
+            display: none;
+        }
+
+        .empty-state.visible {
+            display: block;
         }
 
         .empty-state::before {
@@ -328,22 +374,24 @@
             margin: 0 auto;
         }
 
-        /* Секция срочных задач */
         .urgent-section {
-            background: linear-gradient(145deg, rgba(255, 59, 48, 0.05), rgba(255, 59, 48, 0.02));
-            border: 1px solid rgba(255, 59, 48, 0.15);
+            background: linear-gradient(145deg, rgba(255, 59, 48, 0.08), rgba(255, 59, 48, 0.04));
+            border: 1px solid rgba(255, 59, 48, 0.2);
         }
 
         .urgent-section .tasks-card-header i {
             color: var(--danger);
-            background: rgba(255, 59, 48, 0.1);
+            background: rgba(255, 59, 48, 0.15);
         }
 
         .urgent-section .tasks-card-header h2 {
             color: var(--danger);
         }
 
-        /* Индикатор текущего пользователя */
+        .urgent-section .task-number {
+            background: var(--danger);
+        }
+
         .current-indicator {
             position: absolute;
             bottom: -12px;
@@ -361,7 +409,6 @@
             opacity: 1;
         }
 
-        /* Анимации */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -371,7 +418,6 @@
             animation: fadeIn 0.4s ease-out;
         }
 
-        /* Адаптация */
         @media (max-width: 320px) {
             .account-card {
                 min-width: 140px;
@@ -386,6 +432,14 @@
             
             .account-name {
                 font-size: 15px;
+            }
+            
+            .task-item {
+                padding: 14px;
+            }
+            
+            .task-text {
+                font-size: 14px;
             }
         }
 
@@ -413,7 +467,6 @@
 </head>
 <body>
     <div class="app">
-        <!-- Верхняя панель -->
         <div class="header">
             <div class="header-title">Команда проекта</div>
             <div class="header-date">
@@ -422,47 +475,156 @@
             </div>
         </div>
 
-        <!-- Панель аккаунтов -->
         <div class="accounts-panel" id="accountsPanel">
-            <!-- Аккаунты будут добавлены через JavaScript -->
         </div>
 
-        <!-- Контейнер контента -->
         <div class="user-content-container">
-            <!-- Контент будет добавлен через JavaScript -->
         </div>
     </div>
 
     <script>
-        // Данные команды
         const teamData = [
-            { id: 1, name: "neonikmanager", role: "Основатель проекта" },
-            { id: 2, name: "gmiki_looser", role: "Зам тим лид" },
-            { id: 3, name: "luwle_luele", role: "Зам тим лид" },
-            { id: 4, name: "Tired892", role: "Создатель саундреков" },
-            { id: 5, name: "dissolw7", role: "Разработчик/Тестер" },
-            { id: 6, name: "PrekCompany", role: "3D Моделлинг" },
-            { id: 7, name: "v3n4ss", role: "Озвучка" },
-            { id: 8, name: "matvi4ik", role: "Веб-разработчик" },
-            { id: 9, name: "xxsfww", role: "Менеджмент" },
-            { id: 10, name: "T0CTEP", role: "Сценарист" },
-            { id: 11, name: "literaII", role: "Идейный вдохновитель" },
-            { id: 12, name: "dissolw7", role: "Бета-тестер" },
-            { id: 13, name: "Gwhsksvsis", role: "Технический специалист" },
-            { id: 14, name: "angel16i", role: "Сценарист" },
-            { id: 15, name: "Mansh_rx", role: "Глава по бета-тестированию" }
+            { 
+                id: 1, 
+                name: "neonikmanager", 
+                role: "Основатель проекта",
+                tasks: [
+                    "Следить за выполнением всех поставленных задач"
+                ],
+                urgentTasks: []
+            },
+            { 
+                id: 2, 
+                name: "gmiki_looser", 
+                role: "Зам тим лид",
+                tasks: [
+                    "Разработать основные очертания ландшафта карты"
+                ],
+                urgentTasks: []
+            },
+            { 
+                id: 3, 
+                name: "luwle_luele", 
+                role: "Зам тим лид",
+                tasks: [
+                    "Сделать начальные каст сцены"
+                ],
+                urgentTasks: [
+                    "Прописать основной лор и сюжет игры (совместно с отделом ответственным за сценарий)"
+                ]
+            },
+            { 
+                id: 4, 
+                name: "Tired892", 
+                role: "Создатель саундреков",
+                tasks: [
+                    "Подобрать звуки для каст сцены (работа совместно с @luwle_luele)"
+                ],
+                urgentTasks: []
+            },
+            { 
+                id: 5, 
+                name: "dissolw7", 
+                role: "Разработчик/Тестер",
+                tasks: [],
+                urgentTasks: []
+            },
+            { 
+                id: 6, 
+                name: "PrekCompany", 
+                role: "3D Моделлинг",
+                tasks: [
+                    "Разработать модели ландшафта (совместно с @gmiki_looser)"
+                ],
+                urgentTasks: []
+            },
+            { 
+                id: 7, 
+                name: "v3n4ss", 
+                role: "Озвучка",
+                tasks: [
+                    "Озвучка, звуковое сопровождение персонажей в каст сцене (совместно с @luwle_luele)"
+                ],
+                urgentTasks: []
+            },
+            { 
+                id: 8, 
+                name: "matvi4ik", 
+                role: "Веб-разработчик",
+                tasks: [
+                    "Сделать рабочие бар-панели",
+                    "Выставить логотип вместо заглушек",
+                    "Переработать дизайн сайта в разово-фиолетовые неоновые цвета",
+                    "Полностью переработать фон сайта",
+                    "Сделать рабочие ссылки и контактные данные",
+                    "Куратор: @gmiki_looser"
+                ],
+                urgentTasks: [
+                    "Перевести сайт на русский язык"
+                ]
+            },
+            { 
+                id: 9, 
+                name: "xxsfww", 
+                role: "Менеджмент",
+                tasks: [],
+                urgentTasks: []
+            },
+            { 
+                id: 10, 
+                name: "T0CTEP", 
+                role: "Сценарист",
+                tasks: [
+                    "Прописать основной лор и сюжет игры (совместно с отделом ответственным за сценарий)"
+                ],
+                urgentTasks: []
+            },
+            { 
+                id: 11, 
+                name: "literaII", 
+                role: "Идейный вдохновитель",
+                tasks: [],
+                urgentTasks: [
+                    "Расписать описание анимации: ходьбы бега удара (отписать в 'Идеи')"
+                ]
+            },
+            { 
+                id: 12, 
+                name: "dissolw7", 
+                role: "Бета-тестер",
+                tasks: [],
+                urgentTasks: []
+            },
+            { 
+                id: 13, 
+                name: "Gwhsksvsis", 
+                role: "Технический специалист",
+                tasks: [],
+                urgentTasks: []
+            },
+            { 
+                id: 14, 
+                name: "angel16i", 
+                role: "Сценарист",
+                tasks: [],
+                urgentTasks: []
+            },
+            { 
+                id: 15, 
+                name: "Mansh_rx", 
+                role: "Глава по бета-тестированию",
+                tasks: [],
+                urgentTasks: []
+            }
         ];
 
-        // Текущий выбранный пользователь
         let currentUser = 1;
 
-        // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
             renderAccountsPanel();
             renderUserContent();
             setupEventListeners();
             
-            // Автоскролл к активному аккаунту
             setTimeout(() => {
                 const activeCard = document.querySelector('.account-card.active');
                 if (activeCard) {
@@ -475,7 +637,6 @@
             }, 100);
         });
 
-        // Рендер панели аккаунтов
         function renderAccountsPanel() {
             const container = document.getElementById('accountsPanel');
             container.innerHTML = '';
@@ -502,7 +663,6 @@
             });
         }
 
-        // Рендер контента пользователя
         function renderUserContent() {
             const container = document.querySelector('.user-content-container');
             container.innerHTML = '';
@@ -512,6 +672,14 @@
                 content.className = `user-content ${member.id === currentUser ? 'active' : ''}`;
                 content.id = `user-${member.id}`;
                 
+                const tasksHTML = member.tasks && member.tasks.length > 0 
+                    ? generateTasksHTML(member.tasks, false)
+                    : generateEmptyStateHTML("Нет заданий", "Задачи будут добавлены позже.");
+                
+                const urgentTasksHTML = member.urgentTasks && member.urgentTasks.length > 0
+                    ? generateTasksHTML(member.urgentTasks, true)
+                    : generateEmptyStateHTML("Нет срочных задач", "Все задачи идут по графику. Срочные задачи появятся здесь, когда будут назначены.");
+                
                 content.innerHTML = `
                     <div class="fade-in">
                         <div class="tasks-card">
@@ -519,17 +687,7 @@
                                 <i class="fas fa-tasks"></i>
                                 <h2>Текущие задачи</h2>
                             </div>
-                            
-                            <div class="empty-state">
-                                <div class="empty-icon">
-                                    <i class="far fa-clipboard"></i>
-                                </div>
-                                <div class="empty-title">Нет заданий</div>
-                                <div class="empty-subtitle">
-                                    Для пользователя @${member.name} пока нет активных задач. 
-                                    Задачи будут добавлены позже.
-                                </div>
-                            </div>
+                            ${tasksHTML}
                         </div>
                         
                         <div class="tasks-card urgent-section">
@@ -537,17 +695,7 @@
                                 <i class="fas fa-fire"></i>
                                 <h2>Приоритетные задачи</h2>
                             </div>
-                            
-                            <div class="empty-state">
-                                <div class="empty-icon">
-                                    <i class="far fa-calendar-check"></i>
-                                </div>
-                                <div class="empty-title">Нет срочных задач</div>
-                                <div class="empty-subtitle">
-                                    Все задачи идут по графику. 
-                                    Срочные задачи появятся здесь, когда будут назначены.
-                                </div>
-                            </div>
+                            ${urgentTasksHTML}
                         </div>
                     </div>
                 `;
@@ -556,12 +704,39 @@
             });
         }
 
-        // Выбор пользователя
+        function generateTasksHTML(tasks, isUrgent = false) {
+            return `
+                <div class="tasks-list">
+                    ${tasks.map((task, index) => `
+                        <div class="task-item ${isUrgent ? 'urgent-task' : ''}">
+                            <div class="task-number">${index + 1}</div>
+                            <div class="task-text">
+                                ${task}
+                                ${task.includes('@') ? `<div class="task-collaboration">Совместная работа</div>` : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function generateEmptyStateHTML(title, subtitle) {
+            return `
+                <div class="empty-state visible">
+                    <div class="empty-icon">
+                        <i class="far fa-clipboard"></i>
+                    </div>
+                    <div class="empty-title">${title}</div>
+                    <div class="empty-subtitle">
+                        ${subtitle}
+                    </div>
+                </div>
+            `;
+        }
+
         function selectUser(userId) {
-            // Вибрация
             if (navigator.vibrate) navigator.vibrate(10);
             
-            // Обновляем активную карточку
             document.querySelectorAll('.account-card').forEach(card => {
                 card.classList.remove('active');
             });
@@ -569,7 +744,6 @@
             const newActiveCard = document.querySelector(`.account-card:nth-child(${userId})`);
             if (newActiveCard) {
                 newActiveCard.classList.add('active');
-                // Плавный скролл к карточке
                 newActiveCard.scrollIntoView({ 
                     behavior: 'smooth', 
                     inline: 'center',
@@ -577,12 +751,10 @@
                 });
             }
             
-            // Скрываем текущий контент
             document.querySelectorAll('.user-content').forEach(content => {
                 content.classList.remove('active');
             });
             
-            // Показываем новый контент
             const newContent = document.getElementById(`user-${userId}`);
             if (newContent) {
                 setTimeout(() => {
@@ -593,9 +765,7 @@
             currentUser = userId;
         }
 
-        // Настройка обработчиков событий
         function setupEventListeners() {
-            // Обработка горизонтальных свайпов
             let startX = 0;
             let startY = 0;
             let isScrolling = false;
@@ -612,7 +782,6 @@
                 const diffX = e.touches[0].clientX - startX;
                 const diffY = e.touches[0].clientY - startY;
                 
-                // Определяем, это скролл или свайп
                 if (Math.abs(diffY) > 10) {
                     isScrolling = true;
                 }
@@ -620,10 +789,8 @@
                 if (!isScrolling && Math.abs(diffX) > 50) {
                     e.preventDefault();
                     if (diffX > 0) {
-                        // Свайп вправо - предыдущий пользователь
                         selectUser(Math.max(1, currentUser - 1));
                     } else {
-                        // Свайп влево - следующий пользователь
                         selectUser(Math.min(teamData.length, currentUser + 1));
                     }
                     startX = 0;
@@ -632,7 +799,6 @@
             }, { passive: false });
         }
 
-        // Предотвращение зума
         document.addEventListener('touchstart', function(e) {
             if (e.touches.length > 1) {
                 e.preventDefault();
@@ -648,7 +814,6 @@
             lastTouchEnd = now;
         }, false);
 
-        // Изменение ориентации
         window.addEventListener('orientationchange', function() {
             setTimeout(() => {
                 window.scrollTo(0, 0);
