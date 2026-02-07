@@ -15,16 +15,18 @@
         }
 
         :root {
-            --bg: #000;
-            --surface: #111;
-            --surface-light: #1a1a1a;
-            --border: #333;
+            --bg: #000000;
+            --surface: #0A0A0A;
+            --surface-light: #141414;
+            --card: #1A1A1A;
+            --border: #2A2A2A;
             --primary: #007AFF;
+            --primary-glow: rgba(0, 122, 255, 0.15);
             --danger: #FF3B30;
-            --success: #34C759;
             --text: #FFFFFF;
             --text-secondary: #8E8E93;
-            --radius: 16px;
+            --text-muted: #636366;
+            --radius: 20px;
             --safe-top: env(safe-area-inset-top, 0px);
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
@@ -44,7 +46,6 @@
             height: 100vh;
             height: calc(100vh - var(--safe-top) - var(--safe-bottom));
             padding-top: var(--safe-top);
-            padding-bottom: var(--safe-bottom);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -53,7 +54,7 @@
 
         /* Верхняя панель */
         .header {
-            height: 60px;
+            height: 70px;
             background: var(--surface);
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -65,18 +66,26 @@
         }
 
         .header-title {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
             color: var(--text);
             letter-spacing: -0.5px;
+            background: linear-gradient(90deg, var(--primary), #5AC8FA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header-date {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            background: var(--surface-light);
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
         }
 
         /* Основной контент */
@@ -87,12 +96,12 @@
             background: var(--bg);
         }
 
-        /* Панель выбора пользователя - горизонтальный скролл */
-        .team-scroll {
-            height: 120px;
+        /* Панель аккаунтов */
+        .accounts-panel {
+            height: 140px;
             background: var(--surface);
             border-bottom: 1px solid var(--border);
-            padding: 16px 0 8px 0;
+            padding: 16px 0 12px 0;
             overflow-x: auto;
             overflow-y: hidden;
             white-space: nowrap;
@@ -103,65 +112,145 @@
             flex-shrink: 0;
         }
 
-        .team-scroll::-webkit-scrollbar {
+        .accounts-panel::-webkit-scrollbar {
             display: none;
         }
 
-        .team-item {
+        /* Карточка аккаунта */
+        .account-card {
             display: inline-flex;
             flex-direction: column;
-            align-items: center;
-            padding: 12px 16px;
-            margin: 0 4px;
+            padding: 16px;
+            margin: 0 8px;
             border-radius: var(--radius);
-            background: var(--surface-light);
+            background: var(--card);
             border: 2px solid transparent;
-            min-width: 85px;
-            max-width: 95px;
-            text-align: center;
+            min-width: 160px;
+            max-width: 180px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .team-item.active {
+        .account-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .account-card.active {
             border-color: var(--primary);
-            background: rgba(0, 122, 255, 0.1);
-            transform: scale(1.05);
+            background: linear-gradient(145deg, var(--card), var(--surface-light));
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 122, 255, 0.2);
         }
 
-        .team-avatar {
+        .account-card.active::before {
+            opacity: 1;
+        }
+
+        .account-card:active {
+            transform: scale(0.98);
+        }
+
+        /* Верхняя часть карточки */
+        .account-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .account-icon {
             width: 44px;
             height: 44px;
-            border-radius: 50%;
-            background: var(--primary);
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), #5AC8FA);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 8px;
-            font-weight: 700;
             font-size: 20px;
             color: white;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .team-name {
-            font-size: 13px;
+        .account-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+        }
+
+        .account-card.active .account-icon::after {
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .account-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .account-name {
+            font-size: 16px;
+            font-weight: 700;
             color: var(--text);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            width: 100%;
-            font-weight: 600;
+            margin-bottom: 2px;
         }
 
-        .team-role {
-            font-size: 11px;
-            color: var(--text-secondary);
+        .account-role {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            width: 100%;
-            margin-top: 2px;
+        }
+
+        /* Статус аккаунта */
+        .account-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 8px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #34C759;
+            box-shadow: 0 0 0 2px rgba(52, 199, 89, 0.2);
+        }
+
+        .status-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
         /* Контейнер для контента пользователя */
@@ -180,7 +269,7 @@
             height: 100%;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            padding: 20px;
+            padding: 24px 20px;
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.3s, transform 0.3s;
@@ -198,169 +287,175 @@
             visibility: visible;
         }
 
-        /* Карточка пользователя */
-        .user-card {
-            background: var(--surface);
+        /* Карточка задач */
+        .tasks-card {
+            background: var(--card);
             border-radius: var(--radius);
             padding: 24px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             border: 1px solid var(--border);
         }
 
-        .user-card-header {
+        .tasks-card-header {
             display: flex;
             align-items: center;
             margin-bottom: 24px;
-        }
-
-        .user-card-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), #5AC8FA);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: 800;
-            color: white;
-            margin-right: 20px;
-        }
-
-        .user-card-info h2 {
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 6px;
-            letter-spacing: -0.5px;
-        }
-
-        .user-card-info .role {
-            font-size: 15px;
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        /* Статистика - УБРАНА */
-
-        /* Задачи */
-        .tasks-section {
-            margin-bottom: 32px;
-        }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
             gap: 12px;
         }
 
-        .section-title i {
+        .tasks-card-header i {
+            font-size: 22px;
             color: var(--primary);
+            background: var(--primary-glow);
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tasks-card-header h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text);
+            flex: 1;
         }
 
         /* Состояние "нет задач" */
         .empty-state {
             text-align: center;
-            padding: 50px 20px;
-            background: var(--surface-light);
+            padding: 60px 20px;
+            background: linear-gradient(145deg, var(--surface-light), var(--card));
             border-radius: var(--radius);
             border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .empty-state::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
         }
 
         .empty-icon {
-            font-size: 56px;
+            font-size: 64px;
             margin-bottom: 20px;
-            opacity: 0.3;
-            color: var(--text-secondary);
+            color: var(--text-muted);
+            opacity: 0.4;
+            background: linear-gradient(135deg, var(--surface), var(--card));
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
         }
 
-        .empty-text {
-            font-size: 18px;
-            margin-bottom: 10px;
+        .empty-title {
+            font-size: 20px;
+            font-weight: 800;
             color: var(--text);
-            font-weight: 700;
+            margin-bottom: 12px;
         }
 
-        .empty-subtext {
+        .empty-subtitle {
             font-size: 15px;
-            opacity: 0.7;
             color: var(--text-secondary);
-            line-height: 1.4;
-            max-width: 300px;
+            line-height: 1.5;
+            max-width: 280px;
             margin: 0 auto;
         }
 
-        /* Приоритетные задачи */
+        /* Секция срочных задач */
         .urgent-section {
-            background: rgba(255, 59, 48, 0.05);
-            border: 1px solid rgba(255, 59, 48, 0.2);
-            border-radius: var(--radius);
-            padding: 24px;
+            background: linear-gradient(145deg, rgba(255, 59, 48, 0.05), rgba(255, 59, 48, 0.02));
+            border: 1px solid rgba(255, 59, 48, 0.15);
         }
 
-        .urgent-section .section-title {
+        .urgent-section .tasks-card-header i {
+            color: var(--danger);
+            background: rgba(255, 59, 48, 0.1);
+        }
+
+        .urgent-section .tasks-card-header h2 {
             color: var(--danger);
         }
 
-        .urgent-section .section-title i {
-            color: var(--danger);
-        }
-
-        /* Кнопка быстрого действия */
-        .fab {
+        /* Кнопка добавления */
+        .add-button {
             position: fixed;
-            bottom: calc(20px + var(--safe-bottom));
+            bottom: calc(24px + var(--safe-bottom));
             right: 20px;
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            border-radius: 30px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), #5AC8FA);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 22px;
-            box-shadow: 0 6px 24px rgba(0, 122, 255, 0.4);
+            font-size: 20px;
+            box-shadow: 0 8px 32px rgba(0, 122, 255, 0.4);
             z-index: 1000;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
         }
 
-        .fab:active {
-            transform: scale(0.92);
+        .add-button:active {
+            transform: scale(0.95);
+        }
+
+        /* Индикатор текущего пользователя */
+        .current-indicator {
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .account-card.active .current-indicator {
+            opacity: 1;
         }
 
         /* Анимации */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .fade-in {
-            animation: fadeIn 0.3s ease-out;
+            animation: fadeIn 0.4s ease-out;
         }
 
-        /* Адаптация под разные размеры экранов */
+        /* Адаптация */
         @media (max-width: 320px) {
-            .team-item {
-                min-width: 75px;
-                padding: 10px 12px;
+            .account-card {
+                min-width: 140px;
+                padding: 14px;
             }
             
-            .user-card-avatar {
-                width: 60px;
-                height: 60px;
-                font-size: 24px;
+            .account-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
             }
             
-            .user-card-info h2 {
-                font-size: 22px;
-            }
-            
-            .empty-icon {
-                font-size: 48px;
+            .account-name {
+                font-size: 15px;
             }
         }
 
@@ -381,7 +476,7 @@
                 text-align: center;
                 padding: 20px;
                 z-index: 9999;
-                font-weight: 700;
+                font-weight: 800;
             }
         }
     </style>
@@ -397,9 +492,9 @@
             </div>
         </div>
 
-        <!-- Горизонтальный скролл команды -->
-        <div class="team-scroll" id="teamScroll">
-            <!-- Команда будет добавлена через JavaScript -->
+        <!-- Панель аккаунтов -->
+        <div class="accounts-panel" id="accountsPanel">
+            <!-- Аккаунты будут добавлены через JavaScript -->
         </div>
 
         <!-- Контейнер контента -->
@@ -407,65 +502,91 @@
             <!-- Контент будет добавлен через JavaScript -->
         </div>
 
-        <!-- Кнопка быстрого действия -->
-        <div class="fab" onclick="showAddTask()">
+        <!-- Кнопка добавления -->
+        <button class="add-button" onclick="showAddTask()">
             <i class="fas fa-plus"></i>
-        </div>
+        </button>
     </div>
 
     <script>
-        // Данные команды
+        // Данные команды с иконками для ролей
         const teamData = [
-            { id: 1, name: "neonikmanager", role: "Основатель проекта", initial: "N", color: "#007AFF" },
-            { id: 2, name: "gmiki_looser", role: "Зам тим лид", initial: "G", color: "#FF9500" },
-            { id: 3, name: "luwle_luele", role: "Зам тим лид", initial: "L", color: "#FF2D55" },
-            { id: 4, name: "Tired892", role: "Создатель саундреков", initial: "T", color: "#5856D6" },
-            { id: 5, name: "dissolw7", role: "Разработчик/Тестер", initial: "D", color: "#34C759" },
-            { id: 6, name: "PrekCompany", role: "3D Моделлинг", initial: "P", color: "#AF52DE" },
-            { id: 7, name: "v3n4ss", role: "Озвучка", initial: "V", color: "#FF3B30" },
-            { id: 8, name: "matvi4ik", role: "Веб-разработчик", initial: "M", color: "#5AC8FA" },
-            { id: 9, name: "xxsfww", role: "Менеджмент", initial: "X", color: "#FFCC00" },
-            { id: 10, name: "T0CTEP", role: "Сценарист", initial: "T", color: "#8E8E93" },
-            { id: 11, name: "literaII", role: "Идейный вдохновитель", initial: "L", color: "#32D74B" },
-            { id: 12, name: "dissolw7", role: "Бета-тестер", initial: "D", color: "#64D2FF" },
-            { id: 13, name: "Gwhsksvsis", role: "Технический специалист", initial: "G", color: "#BF5AF2" },
-            { id: 14, name: "angel16i", role: "Сценарист", initial: "A", color: "#FFD60A" },
-            { id: 15, name: "Mansh_rx", role: "Глава по бета-тестированию", initial: "M", color: "#FF9F0A" }
+            { id: 1, name: "neonikmanager", role: "Основатель проекта", initial: "👑", color: "#007AFF" },
+            { id: 2, name: "gmiki_looser", role: "Зам тим лид", initial: "⚡", color: "#FF9500" },
+            { id: 3, name: "luwle_luele", role: "Зам тим лид", initial: "⚡", color: "#FF2D55" },
+            { id: 4, name: "Tired892", role: "Создатель саундреков", initial: "🎵", color: "#5856D6" },
+            { id: 5, name: "dissolw7", role: "Разработчик/Тестер", initial: "💻", color: "#34C759" },
+            { id: 6, name: "PrekCompany", role: "3D Моделлинг", initial: "🎨", color: "#AF52DE" },
+            { id: 7, name: "v3n4ss", role: "Озвучка", initial: "🎤", color: "#FF3B30" },
+            { id: 8, name: "matvi4ik", role: "Веб-разработчик", initial: "🌐", color: "#5AC8FA" },
+            { id: 9, name: "xxsfww", role: "Менеджмент", initial: "📊", color: "#FFCC00" },
+            { id: 10, name: "T0CTEP", role: "Сценарист", initial: "📝", color: "#8E8E93" },
+            { id: 11, name: "literaII", role: "Идейный вдохновитель", initial: "💡", color: "#32D74B" },
+            { id: 12, name: "dissolw7", role: "Бета-тестер", initial: "🧪", color: "#64D2FF" },
+            { id: 13, name: "Gwhsksvsis", role: "Технический специалист", initial: "🔧", color: "#BF5AF2" },
+            { id: 14, name: "angel16i", role: "Сценарист", initial: "📝", color: "#FFD60A" },
+            { id: 15, name: "Mansh_rx", role: "Глава по бета-тестированию", initial: "👨‍💼", color: "#FF9F0A" }
         ];
+
+        // Статусы для аккаунтов
+        const statuses = ["В сети", "Занят", "Оффлайн", "Не беспокоить"];
+        const statusColors = ["#34C759", "#FF9500", "#8E8E93", "#FF3B30"];
 
         // Текущий выбранный пользователь
         let currentUser = 1;
 
         // Инициализация
         document.addEventListener('DOMContentLoaded', function() {
-            renderTeamScroll();
+            renderAccountsPanel();
             renderUserContent();
             setupEventListeners();
             
-            // Автоскролл к активному пользователю
+            // Автоскролл к активному аккаунту
             setTimeout(() => {
-                const activeItem = document.querySelector('.team-item.active');
-                if (activeItem) {
-                    activeItem.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+                const activeCard = document.querySelector('.account-card.active');
+                if (activeCard) {
+                    activeCard.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        inline: 'center',
+                        block: 'nearest'
+                    });
                 }
             }, 100);
         });
 
-        // Рендер горизонтального скролла команды
-        function renderTeamScroll() {
-            const container = document.getElementById('teamScroll');
+        // Рендер панели аккаунтов
+        function renderAccountsPanel() {
+            const container = document.getElementById('accountsPanel');
             container.innerHTML = '';
             
             teamData.forEach(member => {
-                const item = document.createElement('div');
-                item.className = `team-item ${member.id === currentUser ? 'active' : ''}`;
-                item.innerHTML = `
-                    <div class="team-avatar" style="background: ${member.color}">${member.initial}</div>
-                    <div class="team-name">@${member.name}</div>
-                    <div class="team-role">${member.role}</div>
+                const card = document.createElement('div');
+                card.className = `account-card ${member.id === currentUser ? 'active' : ''}`;
+                
+                // Случайный статус
+                const statusIndex = Math.floor(Math.random() * statuses.length);
+                const statusText = statuses[statusIndex];
+                const statusColor = statusColors[statusIndex];
+                
+                card.innerHTML = `
+                    <div class="account-header">
+                        <div class="account-icon" style="background: linear-gradient(135deg, ${member.color}, #5AC8FA)">
+                            ${member.initial}
+                        </div>
+                        <div class="account-info">
+                            <div class="account-name">@${member.name}</div>
+                            <div class="account-role">${member.role}</div>
+                        </div>
+                    </div>
+                    <div class="account-status">
+                        <div class="status-indicator" style="background: ${statusColor}; box-shadow: 0 0 0 2px ${statusColor}20"></div>
+                        <div class="status-text">${statusText}</div>
+                    </div>
+                    <div class="current-indicator"></div>
                 `;
-                item.onclick = () => selectUser(member.id);
-                container.appendChild(item);
+                
+                card.onclick = () => selectUser(member.id);
+                container.appendChild(card);
             });
         }
 
@@ -480,44 +601,40 @@
                 content.id = `user-${member.id}`;
                 
                 content.innerHTML = `
-                    <div class="user-card fade-in">
-                        <div class="user-card-header">
-                            <div class="user-card-avatar" style="background: linear-gradient(135deg, ${member.color}, #5AC8FA)">
-                                ${member.initial}
-                            </div>
-                            <div class="user-card-info">
-                                <h2>@${member.name}</h2>
-                                <div class="role">${member.role}</div>
-                            </div>
-                        </div>
-                        
-                        <div class="tasks-section">
-                            <div class="section-title">
+                    <div class="fade-in">
+                        <div class="tasks-card">
+                            <div class="tasks-card-header">
                                 <i class="fas fa-tasks"></i>
-                                <span>Текущие задачи</span>
+                                <h2>Текущие задачи</h2>
                             </div>
                             
                             <div class="empty-state">
                                 <div class="empty-icon">
                                     <i class="far fa-clipboard"></i>
                                 </div>
-                                <div class="empty-text">Нет заданий</div>
-                                <div class="empty-subtext">Задачи будут добавлены позже. Пока что нет активных задач для этого участника команды.</div>
+                                <div class="empty-title">Нет заданий</div>
+                                <div class="empty-subtitle">
+                                    Для пользователя @${member.name} пока нет активных задач. 
+                                    Задачи будут добавлены позже.
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="tasks-section urgent-section">
-                            <div class="section-title">
+                        <div class="tasks-card urgent-section">
+                            <div class="tasks-card-header">
                                 <i class="fas fa-fire"></i>
-                                <span>Приоритетные задачи</span>
+                                <h2>Приоритетные задачи</h2>
                             </div>
                             
                             <div class="empty-state">
                                 <div class="empty-icon">
                                     <i class="far fa-calendar-check"></i>
                                 </div>
-                                <div class="empty-text">Нет срочных задач</div>
-                                <div class="empty-subtext">Все задачи идут по графику. Срочные задачи появятся здесь, когда будут назначены.</div>
+                                <div class="empty-title">Нет срочных задач</div>
+                                <div class="empty-subtitle">
+                                    Все задачи идут по графику. 
+                                    Срочные задачи появятся здесь, когда будут назначены.
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -529,16 +646,23 @@
 
         // Выбор пользователя
         function selectUser(userId) {
-            // Обновляем активный элемент в скролле
-            document.querySelectorAll('.team-item').forEach(item => {
-                item.classList.remove('active');
+            // Вибрация
+            if (navigator.vibrate) navigator.vibrate(10);
+            
+            // Обновляем активную карточку
+            document.querySelectorAll('.account-card').forEach(card => {
+                card.classList.remove('active');
             });
             
-            const newActiveItem = document.querySelector(`.team-item:nth-child(${userId})`);
-            if (newActiveItem) {
-                newActiveItem.classList.add('active');
-                // Скроллим к выбранному элементу
-                newActiveItem.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            const newActiveCard = document.querySelector(`.account-card:nth-child(${userId})`);
+            if (newActiveCard) {
+                newActiveCard.classList.add('active');
+                // Плавный скролл к карточке
+                newActiveCard.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    inline: 'center',
+                    block: 'nearest'
+                });
             }
             
             // Скрываем текущий контент
@@ -559,13 +683,15 @@
 
         // Настройка обработчиков событий
         function setupEventListeners() {
-            // Обработка свайпов
+            // Обработка горизонтальных свайпов
             let startX = 0;
             let startY = 0;
+            let isScrolling = false;
             
             document.querySelector('.main-content').addEventListener('touchstart', function(e) {
                 startX = e.touches[0].clientX;
                 startY = e.touches[0].clientY;
+                isScrolling = false;
             });
             
             document.querySelector('.main-content').addEventListener('touchmove', function(e) {
@@ -574,8 +700,13 @@
                 const diffX = e.touches[0].clientX - startX;
                 const diffY = e.touches[0].clientY - startY;
                 
-                // Если горизонтальный свайп сильнее вертикального
-                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                // Определяем, это скролл или свайп
+                if (Math.abs(diffY) > 10) {
+                    isScrolling = true;
+                }
+                
+                if (!isScrolling && Math.abs(diffX) > 50) {
+                    e.preventDefault();
                     if (diffX > 0) {
                         // Свайп вправо - предыдущий пользователь
                         selectUser(Math.max(1, currentUser - 1));
@@ -586,107 +717,202 @@
                     startX = 0;
                     startY = 0;
                 }
-            });
+            }, { passive: false });
+            
+            // Автоматическое обновление статусов
+            setInterval(() => {
+                const cards = document.querySelectorAll('.account-card');
+                cards.forEach(card => {
+                    const statusIndex = Math.floor(Math.random() * statuses.length);
+                    const statusIndicator = card.querySelector('.status-indicator');
+                    const statusText = card.querySelector('.status-text');
+                    
+                    if (statusIndicator && statusText && Math.random() > 0.7) {
+                        statusIndicator.style.background = statusColors[statusIndex];
+                        statusIndicator.style.boxShadow = `0 0 0 2px ${statusColors[statusIndex]}20`;
+                        statusText.textContent = statuses[statusIndex];
+                    }
+                });
+            }, 10000);
         }
 
-        // Функция для FAB кнопки
+        // Функция для кнопки добавления
         function showAddTask() {
-            const userName = teamData.find(m => m.id === currentUser).name;
-            const userRole = teamData.find(m => m.id === currentUser).role;
+            const member = teamData.find(m => m.id === currentUser);
             
-            showNotification(`📝 Добавить задачу для @${userName} (${userRole})`);
+            // Создаем модальное окно
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 2000;
+                opacity: 0;
+                transition: opacity 0.3s;
+                padding: 20px;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: var(--card);
+                    border-radius: var(--radius);
+                    padding: 30px;
+                    max-width: 400px;
+                    width: 100%;
+                    border: 1px solid var(--border);
+                    transform: translateY(20px);
+                    transition: transform 0.3s;
+                ">
+                    <div style="margin-bottom: 24px;">
+                        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text);">
+                            Новая задача
+                        </h3>
+                        <p style="color: var(--text-secondary); font-size: 14px;">
+                            Для: @${member.name} • ${member.role}
+                        </p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <input type="text" placeholder="Название задачи" style="
+                            width: 100%;
+                            padding: 16px;
+                            background: var(--surface);
+                            border: 1px solid var(--border);
+                            border-radius: 12px;
+                            color: var(--text);
+                            font-size: 16px;
+                            margin-bottom: 12px;
+                        ">
+                        <textarea placeholder="Описание задачи" style="
+                            width: 100%;
+                            padding: 16px;
+                            background: var(--surface);
+                            border: 1px solid var(--border);
+                            border-radius: 12px;
+                            color: var(--text);
+                            font-size: 16px;
+                            min-height: 100px;
+                            resize: vertical;
+                        "></textarea>
+                    </div>
+                    
+                    <div style="display: flex; gap: 12px;">
+                        <button onclick="closeModal()" style="
+                            flex: 1;
+                            padding: 16px;
+                            background: var(--surface);
+                            border: 1px solid var(--border);
+                            border-radius: 12px;
+                            color: var(--text);
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">Отмена</button>
+                        <button onclick="createTask()" style="
+                            flex: 1;
+                            padding: 16px;
+                            background: linear-gradient(135deg, var(--primary), #5AC8FA);
+                            border: none;
+                            border-radius: 12px;
+                            color: white;
+                            font-weight: 600;
+                            cursor: pointer;
+                        ">Создать</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Анимация появления
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                modal.querySelector('div').style.transform = 'translateY(0)';
+            }, 10);
+            
+            // Сохраняем ссылку на модальное окно
+            window.currentModal = modal;
+        }
+
+        function closeModal() {
+            if (window.currentModal) {
+                window.currentModal.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(window.currentModal);
+                    window.currentModal = null;
+                }, 300);
+            }
+        }
+
+        function createTask() {
+            closeModal();
+            showNotification('✅ Задача успешно создана!');
         }
 
         function showNotification(message) {
-            // Создаем уведомление
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
-                top: 80px;
+                top: 100px;
                 left: 20px;
                 right: 20px;
-                background: var(--primary);
+                background: linear-gradient(135deg, var(--primary), #5AC8FA);
                 color: white;
                 padding: 16px 20px;
                 border-radius: var(--radius);
                 font-size: 15px;
                 font-weight: 600;
-                z-index: 9999;
-                box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-                animation: slideDown 0.3s ease-out;
+                z-index: 2000;
                 text-align: center;
+                transform: translateY(-20px);
+                opacity: 0;
+                transition: all 0.3s;
+                box-shadow: 0 8px 32px rgba(0, 122, 255, 0.4);
             `;
-            
-            // Добавляем стили для анимации
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideDown {
-                    from { top: 60px; opacity: 0; }
-                    to { top: 80px; opacity: 1; }
-                }
-                @keyframes slideUp {
-                    from { top: 80px; opacity: 1; }
-                    to { top: 60px; opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
             
             notification.textContent = message;
             document.body.appendChild(notification);
             
-            // Удаляем через 2 секунды
             setTimeout(() => {
-                notification.style.animation = 'slideUp 0.3s ease-out';
+                notification.style.transform = 'translateY(0)';
+                notification.style.opacity = '1';
+            }, 10);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateY(-20px)';
+                notification.style.opacity = '0';
                 setTimeout(() => {
                     document.body.removeChild(notification);
                 }, 300);
-            }, 2000);
+            }, 3000);
         }
 
-        // Обработка изменения ориентации экрана
-        window.addEventListener('orientationchange', function() {
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-            }, 100);
-        });
+        // Предотвращение зума
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
 
-        // Предотвращение зума двойным тапом
         let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
+        document.addEventListener('touchend', function(e) {
             const now = Date.now();
             if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
+                e.preventDefault();
             }
             lastTouchEnd = now;
         }, false);
 
-        // Плавная анимация при скролле
-        document.querySelector('.main-content').addEventListener('scroll', function() {
-            const scrollTop = this.scrollTop;
-            const header = document.querySelector('.header');
-            
-            if (scrollTop > 10) {
-                header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.3)';
-            } else {
-                header.style.boxShadow = 'none';
-            }
-        });
-
-        // Виброотклик на тап (если поддерживается)
-        function vibrate() {
-            if (navigator.vibrate) {
-                navigator.vibrate(10);
-            }
-        }
-
-        // Добавляем вибрацию на клик по пользователю
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.team-item')) {
-                vibrate();
-            }
-            if (e.target.closest('.fab')) {
-                vibrate();
-            }
+        // Изменение ориентации
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 100);
         });
     </script>
 </body>
