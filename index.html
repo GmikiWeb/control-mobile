@@ -165,7 +165,7 @@
         .account-header {
             display: flex;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             gap: 12px;
         }
 
@@ -173,7 +173,7 @@
             width: 44px;
             height: 44px;
             border-radius: 14px;
-            background: linear-gradient(135deg, var(--primary), #5AC8FA);
+            background: #636366;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -182,27 +182,6 @@
             flex-shrink: 0;
             position: relative;
             overflow: hidden;
-        }
-
-        .account-icon::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: translateX(-100%);
-        }
-
-        .account-card.active .account-icon::after {
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            100% {
-                transform: translateX(100%);
-            }
         }
 
         .account-info {
@@ -227,30 +206,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-        }
-
-        /* Статус аккаунта */
-        .account-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 0;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            margin-top: 8px;
-        }
-
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #34C759;
-            box-shadow: 0 0 0 2px rgba(52, 199, 89, 0.2);
-        }
-
-        .status-text {
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 500;
         }
 
         /* Контейнер для контента пользователя */
@@ -388,31 +343,6 @@
             color: var(--danger);
         }
 
-        /* Кнопка добавления */
-        .add-button {
-            position: fixed;
-            bottom: calc(24px + var(--safe-bottom));
-            right: 20px;
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--primary), #5AC8FA);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            box-shadow: 0 8px 32px rgba(0, 122, 255, 0.4);
-            z-index: 1000;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-        }
-
-        .add-button:active {
-            transform: scale(0.95);
-        }
-
         /* Индикатор текущего пользователя */
         .current-indicator {
             position: absolute;
@@ -501,36 +431,27 @@
         <div class="user-content-container">
             <!-- Контент будет добавлен через JavaScript -->
         </div>
-
-        <!-- Кнопка добавления -->
-        <button class="add-button" onclick="showAddTask()">
-            <i class="fas fa-plus"></i>
-        </button>
     </div>
 
     <script>
-        // Данные команды с иконками для ролей
+        // Данные команды
         const teamData = [
-            { id: 1, name: "neonikmanager", role: "Основатель проекта", initial: "👑", color: "#007AFF" },
-            { id: 2, name: "gmiki_looser", role: "Зам тим лид", initial: "⚡", color: "#FF9500" },
-            { id: 3, name: "luwle_luele", role: "Зам тим лид", initial: "⚡", color: "#FF2D55" },
-            { id: 4, name: "Tired892", role: "Создатель саундреков", initial: "🎵", color: "#5856D6" },
-            { id: 5, name: "dissolw7", role: "Разработчик/Тестер", initial: "💻", color: "#34C759" },
-            { id: 6, name: "PrekCompany", role: "3D Моделлинг", initial: "🎨", color: "#AF52DE" },
-            { id: 7, name: "v3n4ss", role: "Озвучка", initial: "🎤", color: "#FF3B30" },
-            { id: 8, name: "matvi4ik", role: "Веб-разработчик", initial: "🌐", color: "#5AC8FA" },
-            { id: 9, name: "xxsfww", role: "Менеджмент", initial: "📊", color: "#FFCC00" },
-            { id: 10, name: "T0CTEP", role: "Сценарист", initial: "📝", color: "#8E8E93" },
-            { id: 11, name: "literaII", role: "Идейный вдохновитель", initial: "💡", color: "#32D74B" },
-            { id: 12, name: "dissolw7", role: "Бета-тестер", initial: "🧪", color: "#64D2FF" },
-            { id: 13, name: "Gwhsksvsis", role: "Технический специалист", initial: "🔧", color: "#BF5AF2" },
-            { id: 14, name: "angel16i", role: "Сценарист", initial: "📝", color: "#FFD60A" },
-            { id: 15, name: "Mansh_rx", role: "Глава по бета-тестированию", initial: "👨‍💼", color: "#FF9F0A" }
+            { id: 1, name: "neonikmanager", role: "Основатель проекта" },
+            { id: 2, name: "gmiki_looser", role: "Зам тим лид" },
+            { id: 3, name: "luwle_luele", role: "Зам тим лид" },
+            { id: 4, name: "Tired892", role: "Создатель саундреков" },
+            { id: 5, name: "dissolw7", role: "Разработчик/Тестер" },
+            { id: 6, name: "PrekCompany", role: "3D Моделлинг" },
+            { id: 7, name: "v3n4ss", role: "Озвучка" },
+            { id: 8, name: "matvi4ik", role: "Веб-разработчик" },
+            { id: 9, name: "xxsfww", role: "Менеджмент" },
+            { id: 10, name: "T0CTEP", role: "Сценарист" },
+            { id: 11, name: "literaII", role: "Идейный вдохновитель" },
+            { id: 12, name: "dissolw7", role: "Бета-тестер" },
+            { id: 13, name: "Gwhsksvsis", role: "Технический специалист" },
+            { id: 14, name: "angel16i", role: "Сценарист" },
+            { id: 15, name: "Mansh_rx", role: "Глава по бета-тестированию" }
         ];
-
-        // Статусы для аккаунтов
-        const statuses = ["В сети", "Занят", "Оффлайн", "Не беспокоить"];
-        const statusColors = ["#34C759", "#FF9500", "#8E8E93", "#FF3B30"];
 
         // Текущий выбранный пользователь
         let currentUser = 1;
@@ -563,24 +484,15 @@
                 const card = document.createElement('div');
                 card.className = `account-card ${member.id === currentUser ? 'active' : ''}`;
                 
-                // Случайный статус
-                const statusIndex = Math.floor(Math.random() * statuses.length);
-                const statusText = statuses[statusIndex];
-                const statusColor = statusColors[statusIndex];
-                
                 card.innerHTML = `
                     <div class="account-header">
-                        <div class="account-icon" style="background: linear-gradient(135deg, ${member.color}, #5AC8FA)">
-                            ${member.initial}
+                        <div class="account-icon">
+                            <i class="fas fa-user-secret"></i>
                         </div>
                         <div class="account-info">
                             <div class="account-name">@${member.name}</div>
                             <div class="account-role">${member.role}</div>
                         </div>
-                    </div>
-                    <div class="account-status">
-                        <div class="status-indicator" style="background: ${statusColor}; box-shadow: 0 0 0 2px ${statusColor}20"></div>
-                        <div class="status-text">${statusText}</div>
                     </div>
                     <div class="current-indicator"></div>
                 `;
@@ -718,178 +630,6 @@
                     startY = 0;
                 }
             }, { passive: false });
-            
-            // Автоматическое обновление статусов
-            setInterval(() => {
-                const cards = document.querySelectorAll('.account-card');
-                cards.forEach(card => {
-                    const statusIndex = Math.floor(Math.random() * statuses.length);
-                    const statusIndicator = card.querySelector('.status-indicator');
-                    const statusText = card.querySelector('.status-text');
-                    
-                    if (statusIndicator && statusText && Math.random() > 0.7) {
-                        statusIndicator.style.background = statusColors[statusIndex];
-                        statusIndicator.style.boxShadow = `0 0 0 2px ${statusColors[statusIndex]}20`;
-                        statusText.textContent = statuses[statusIndex];
-                    }
-                });
-            }, 10000);
-        }
-
-        // Функция для кнопки добавления
-        function showAddTask() {
-            const member = teamData.find(m => m.id === currentUser);
-            
-            // Создаем модальное окно
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.8);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 2000;
-                opacity: 0;
-                transition: opacity 0.3s;
-                padding: 20px;
-            `;
-            
-            modal.innerHTML = `
-                <div style="
-                    background: var(--card);
-                    border-radius: var(--radius);
-                    padding: 30px;
-                    max-width: 400px;
-                    width: 100%;
-                    border: 1px solid var(--border);
-                    transform: translateY(20px);
-                    transition: transform 0.3s;
-                ">
-                    <div style="margin-bottom: 24px;">
-                        <h3 style="font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text);">
-                            Новая задача
-                        </h3>
-                        <p style="color: var(--text-secondary); font-size: 14px;">
-                            Для: @${member.name} • ${member.role}
-                        </p>
-                    </div>
-                    
-                    <div style="margin-bottom: 20px;">
-                        <input type="text" placeholder="Название задачи" style="
-                            width: 100%;
-                            padding: 16px;
-                            background: var(--surface);
-                            border: 1px solid var(--border);
-                            border-radius: 12px;
-                            color: var(--text);
-                            font-size: 16px;
-                            margin-bottom: 12px;
-                        ">
-                        <textarea placeholder="Описание задачи" style="
-                            width: 100%;
-                            padding: 16px;
-                            background: var(--surface);
-                            border: 1px solid var(--border);
-                            border-radius: 12px;
-                            color: var(--text);
-                            font-size: 16px;
-                            min-height: 100px;
-                            resize: vertical;
-                        "></textarea>
-                    </div>
-                    
-                    <div style="display: flex; gap: 12px;">
-                        <button onclick="closeModal()" style="
-                            flex: 1;
-                            padding: 16px;
-                            background: var(--surface);
-                            border: 1px solid var(--border);
-                            border-radius: 12px;
-                            color: var(--text);
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">Отмена</button>
-                        <button onclick="createTask()" style="
-                            flex: 1;
-                            padding: 16px;
-                            background: linear-gradient(135deg, var(--primary), #5AC8FA);
-                            border: none;
-                            border-radius: 12px;
-                            color: white;
-                            font-weight: 600;
-                            cursor: pointer;
-                        ">Создать</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            // Анимация появления
-            setTimeout(() => {
-                modal.style.opacity = '1';
-                modal.querySelector('div').style.transform = 'translateY(0)';
-            }, 10);
-            
-            // Сохраняем ссылку на модальное окно
-            window.currentModal = modal;
-        }
-
-        function closeModal() {
-            if (window.currentModal) {
-                window.currentModal.style.opacity = '0';
-                setTimeout(() => {
-                    document.body.removeChild(window.currentModal);
-                    window.currentModal = null;
-                }, 300);
-            }
-        }
-
-        function createTask() {
-            closeModal();
-            showNotification('✅ Задача успешно создана!');
-        }
-
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                left: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, var(--primary), #5AC8FA);
-                color: white;
-                padding: 16px 20px;
-                border-radius: var(--radius);
-                font-size: 15px;
-                font-weight: 600;
-                z-index: 2000;
-                text-align: center;
-                transform: translateY(-20px);
-                opacity: 0;
-                transition: all 0.3s;
-                box-shadow: 0 8px 32px rgba(0, 122, 255, 0.4);
-            `;
-            
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateY(0)';
-                notification.style.opacity = '1';
-            }, 10);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateY(-20px)';
-                notification.style.opacity = '0';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
         }
 
         // Предотвращение зума
